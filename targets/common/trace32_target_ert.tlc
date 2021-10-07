@@ -1,0 +1,24 @@
+%% SYSTLC: TRACE32 Target \
+%%    TMF: trace32_target_tmf.tmf MAKE: trace32_target_make EXTMODE: no_ext_comm
+%%
+%%
+%%        TRACE32 Integration for Simulink
+%%    Copyright (c) 2012-2015 Lauterbach GmbH
+%%              All rights reserved
+
+
+%selectfile NULL_FILE
+
+%assign CodeFormat = "Embedded-C"
+%assign TargetType = "RT"
+%assign Language   = "C"
+
+%include "codegenentry.tlc"
+
+/%
+  BEGIN_RTW_OPTIONS
+  rtwgensettings.DerivedFrom    = 'ert.tlc';
+  rtwgensettings.BuildDirSuffix = '_rtw';
+  rtwgensettings.Version        = '1';
+  END_RTW_OPTIONS 
+%/

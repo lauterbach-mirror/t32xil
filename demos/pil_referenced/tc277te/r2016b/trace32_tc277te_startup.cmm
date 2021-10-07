@@ -1,0 +1,48 @@
+; --------------------------------------------------------------------------------
+; @Title:           Demo for TRACE32 Integration for Simulink, R2014b
+; @Description: 
+;   Startup script for TriCore code generation demo. The demo works both with
+;   TriCore evaluation boards and the TRACE32 Instruction Set Simulator.
+;   Except the first ENTRY line the script may be adapted by the user.
+; @Keywords: MATLAB Simulink 
+; @Author: MBU
+; @Board: TriBoard*
+; @Chip: TC[12]*
+; @Copyright: (C) 1989-2015 Lauterbach GmbH, licensed for use with TRACE32(R) only
+; --------------------------------------------------------------------------------
+; $Id: trace32_tc277te_startup.cmm 3410 2019-01-18 12:27:46Z csax $
+
+HELP.Filter.Add intsimulink
+
+ENTRY %LINE &ELF_FILE  ;do not modify this line
+
+IF (!OS.FILE(&ELF_FILE))
+(
+    PRINT %ERROR "The target binary location must be passed to the script."
+    ENDDO
+)
+
+RESet
+WinCLEAR
+AREA
+SYStem
+SYStem.CPU TC277TE
+
+IF DAP.Available()
+    SYStem.CONFIG.DEBUGPORTTYPE DAP2  ;bi-directional debug cable
+ELSE
+    SYStem.CONFIG.DEBUGPORTTYPE JTAG  ;uni-directional debug cable
+
+SYStem.Up
+Data.LOAD "&ELF_FILE"
+
+IF SIMULATOR()
+    SYStem.Option.DUALPORT ON
+
+Mode.Mix
+List.Mix
+
+; Do not start the target, if stack profiling is enabled
+Go
+
+ENDDO

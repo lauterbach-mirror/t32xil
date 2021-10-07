@@ -1,0 +1,132 @@
+; --------------------------------------------------------------------------------
+; @Title: Analyze the stack usage
+; @Description:
+;   Determine the maximum stack usage by checking the integrity of a byte pattern
+;   within the stack memory area.
+;
+; @Keywords: PIL Processor-in-the-Loop Simulink MATLAB model-based
+; @Author: CSA, MBU
+; @Copyright: (C) 1989-2016 Lauterbach GmbH, licensed for use with TRACE32(R) only
+; --------------------------------------------------------------------------------
+; $Id: check_stack.cmm 3265 2018-11-22 08:50:35Z csax $
+
+
+; --------------------------------------------------------------------------------
+; Get and check input parameters
+; --------------------------------------------------------------------------------
+PARAMETERS &parameters
+
+PRIVATE &start_address  // Start address of the stack memory area
+&start_address=STRing.SCANAndExtract("&parameters","START_ADDRESS=","")
+
+PRIVATE &end_address  // End address of the stack memory area
+&end_address=STRing.SCANAndExtract("&parameters","END_ADDRESS=","")
+
+PRIVATE &growth_direction  // Determines if stack grows from high to low addresses or otherwise
+&growth_direction=STRing.SCANAndExtract("&parameters","GROWTH_DIRECTION=","")
+IF STRing.SCAN("|UP|DOWN|","|&growth_direction|",0)<0
+(
+  PRINT %ERROR "Invalid growth direction."
+  ENDDO FALSE()
+)
+
+PRIVATE &pattern  // Marker byte pattern
+&pattern=STRing.SCANAndExtract("&parameters","PATTERN=","")
+
+; --------------------------------------------------------------------------------
+; Find the opposite base address of the stack memory
+; --------------------------------------------------------------------------------
+PRIVATE &stack_inverse_base  // Opposite end of the stack memory
+PRIVATE &stack_length  // Length of the stack memory
+IF ("&growth_direction"=="UP")
+(
+  IF (&start_address>&end_address)
+  (
+    &stack_inverse_base=&start_address
+    &stack_length=&start_address-&end_address+1.
+  )
+  ELSE
+  (
+    &stack_inverse_base=&end_address
+    &stack_length=&end_address-&start_address+1.
+  )
+)
+ELSE
+(
+  IF (&start_address>&end_address)
+  (
+    &stack_inverse_base=&end_address
+    &stack_length=&start_address-&end_address+1.
+  )
+  ELSE
+  (
+    &stack_inverse_base=&start_address
+    &stack_length=&end_address-&start_address+1.
+  )
+)
+
+; --------------------------------------------------------------------------------
+; Search from the the opposite end of the stack memory area until the marker
+; pattern stops
+; --------------------------------------------------------------------------------
+PRIVATE &offset  // Current offset from the base address
+&offset=0.
+
+PRIVATE &untouched_location  // Address with intact marker pattern occurs
+&untouched_location=""
+
+&offset=0.
+IF ("&growth_direction"=="UP")
+(
+  WHILE (&offset<-&stack_length)
+  (
+    PRIVATE &address
+    &address=&stack_inverse_base+&offset
+    IF (Data.Byte(&address)!=&pattern
+    (
+      GOTO pattern_violation_detected
+    )
+    &untouched_location=&address
+    &offset=&offset-1.
+  )
+)
+ELSE
+(
+  WHILE (&offset<&stack_length)
+  (
+    PRIVATE &address
+    &address=&stack_inverse_base+&offset
+    IF (Data.Byte(P:&address)!=&pattern)
+    (
+      GOTO pattern_violation_detected
+    )
+    &untouched_location=&address
+    &offset=&offset+1.
+  )
+)
+
+; --------------------------------------------------------------------------------
+; Report back the maximum stack usage
+; --------------------------------------------------------------------------------
+pattern_violation_detected:
+
+PRIVATE &stack_usage_bytes  // Number of bytes in the stack memory that have been used
+&stack_usage_bytes=&stack_length
+
+IF ("&untouched_location"!="")
+(
+  ;&stack_usage_bytes=&stack_length-math.ABS(&untouched_location-&stack_inverse_base)
+  PRIVATE &diff
+  &diff=&untouched_location-&stack_inverse_base+1.
+  IF (&diff<0)
+  (
+    &diff=&stack_inverse_base-&untouched_location+1.
+  )
+  &stack_usage_bytes=&stack_length-&diff
+)
+
+PRIVATE &message
+&message="-- Maximum Stack Usage: "+FORMAT.DecimalU(1.,&stack_usage_bytes)+"."+" Bytes ("+FORMAT.DecimalU(1.,&stack_length)+"."+" Bytes available) --"
+PRINT "&message"
+
+ENDDO TRUE()

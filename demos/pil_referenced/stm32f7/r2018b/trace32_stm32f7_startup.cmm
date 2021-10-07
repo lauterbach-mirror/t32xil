@@ -1,0 +1,93 @@
+; --------------------------------------------------------------------------------
+; @Title: Load target code for STM32F7
+; @Description:
+;   Load target code and set-up off-chip trace. Load ECA files for code-to-model
+;   navigation.
+;   Prerequisites:
+;    * Connect Debug Cable to CN15 JTAG
+;      or
+;      Connect Combiprobe/uTrace to CN12 TRACE
+;      and connect DebugCable to Preprocessor
+
+; @Keywords: ARM, Cortex-M7
+; @Author: CSA
+; @Board: STM32756G-EVAL2
+; @Chip: STM32F756ZG
+; @Copyright: (C) 1989-2018 Lauterbach GmbH, licensed for use with TRACE32(R) only
+; --------------------------------------------------------------------------------
+; $Id: trace32_arm_hercules_rm57_startup.cmm 2855 2018-07-06 13:37:20Z csax $
+
+HELP.Filter.Add intsimulink
+
+ENTRY %LINE &ELF_FILE  ;do not modify this line
+
+IF (!OS.FILE(&ELF_FILE))
+(
+    PRINT %ERROR "The target binary location must be passed to the script."
+    ENDDO
+)
+
+SYStem.CPU STM32F756ZG
+SYStem.CONFIG.DEBUGPORTTYPE SWD
+IF COMBIPROBE()||UTRACE()
+(
+  SYStem.CONFIG.CONNECTOR MIPI20T
+)
+SYStem.Option DUALPORT ON
+SYStem.MemAccess DAP
+SYStem.JtagClock 10MHz
+Trace.DISable
+SYStem.Up
+
+IF SIMULATOR()
+(
+  TRACE.OFF
+)
+ELSE
+(
+  ; --------------------------------------------------------------------------------
+  ; Initialize OFFCHIP trace (ETM, ITM)
+  ; --------------------------------------------------------------------------------
+  IF COMBIPROBE()||UTRACE()||Analyzer()
+  (
+    ; Set PinMux and enable Clocks
+    Data.Set AD:0xe0042004 %Long Data.Long(E:0xe0042004)|0xe0 ; DBGMCU_CR
+    ; Set PinMux for PE2-6 -AF0
+    Data.Set AD:0x40023810 %Long Data.Long(E:0x40023810)&~0x10      ; RCC_AHB1RST
+    Data.Set AD:0x40023830 %Long Data.Long(E:0x40023830)|0x10       ; RCC_AHB1ENR
+    Data.Set AD:0x40021000 %Long Data.Long(E:0x40021000)|0x00002aa0 ; GPIOE_MODER
+    Data.Set AD:0x40021008 %Long Data.Long(E:0x40021008)|0x00003ff0 ; GPIOE_OSPEEDR
+    Data.Set AD:0x40021020 %Long Data.Long(E:0x40021020)&0xf00000ff ; GPIOE_AFRL
+  
+    TPIU.PortSize 4
+    TPIU.PortMode Continuous
+    ITM.DataTrace CorrelatedData
+    ITM.ON
+    ETM.Trace ON
+    ETM.COND ALL
+    ETM.ON
+  )
+  IF COMBIPROBE()||UTRACE()
+  (
+    Trace.METHOD CAnalyzer
+    Trace.AutoInit ON
+    CAnalyzer.AutoFocus
+  )
+  IF Analyzer()
+  (
+    Trace.METHOD Analyzer
+    Trace.AutoInit ON
+    Trace.AutoFocus
+  )
+)
+
+Data.LOAD "&ELF_FILE"
+sYmbol.ECA.LOADALL /SkipErrors
+
+Mode.Mix
+List.Mix
+
+; Do not start the target, if stack profiling is enabled
+Go
+
+ENDDO

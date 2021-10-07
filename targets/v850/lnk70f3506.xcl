@@ -1,0 +1,225 @@
+//-------------------------------------------------------------------------
+//      XLINK command file template for V850E2M microcontroller uPD70F3506.
+//
+//      This file can be used to link object files from the V850E
+//      Assembler, AV850, and the C/C++ compiler ICCV850.
+//
+//          This file is generated from the device file:
+//          DF3506.800
+//          Copyright(C) 2011 Renesas
+//          Format version 1.00, File version 1.10 
+//-------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------
+//      The following segments are defined in this template link file:
+//
+//      INTVEC      -- Interrupt vectors.
+//      TRAPVEC     -- Trap vector.
+//      CLTVEC      -- Calltable vectors.
+//      SYSCALLVEC  -- System call vectors.
+//      CSTART      -- The C/C++ startup code.
+//      RCODE       -- Code used by C/C++ run-time library.
+//      ICODE       -- Code used by interrupt functions.
+//      CLTCODE     -- Code of calltable functions.
+//      SYSCALLCODE -- Code of system call functions.
+//      CODE        -- Program code.
+//      DIFUNCT     -- Dynamic initialization vector used by C++
+//      CSTACK      -- The stack used by C/C++ programs.
+//      HEAP        -- The heap used for malloc and free
+//      SADDR7_x    -- Variables used by __saddr (128 byte offset).
+//      SADDR8_x    -- Variables used by __saddr (256 byte offset).
+//      NEAR_x      -- Variables used by __near (must be +- 32KB from address 0).
+//      BREL_x      -- Variables used by __brel.
+//      BREL23_x    -- Variables used by __brel23.
+//      HUGE_x      -- Variables used by __huge.
+//
+//      Where _x could be one of:
+//
+//      _BASE   -- An empty placeholder segment that should be placed
+//                 in front of the other segments (SADDR and BREL).
+//      _CBASE  -- An empty placeholder segment that should be placed
+//                 in front of the other segments (BREL_C).
+//      _Z      -- Initialized data (initvalue = 0 or without init value).
+//      _I      -- Initialized data (initvalue != 0).
+//      _ID     -- The inial values of _I.
+//      _N      -- Uninitialized data, used by __no_init.
+//      _C      -- Constants.
+//
+//      NOTE:   Be sure to use end values for the defined addresses.
+//-------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------
+//      Define CPU
+//-------------------------------------------------------------------------
+-cv850
+
+//-------------------------------------------------------------------------
+//      Size of the stack.
+//      Remove comment and modify number if used from command line.
+//-------------------------------------------------------------------------
+-D_CSTACK_SIZE=400
+
+//-------------------------------------------------------------------------
+//      Size of the heap.
+//      Remove comment and modify number if used from command line.
+//-------------------------------------------------------------------------
+-D_HEAP_SIZE=400
+
+//-------------------------------------------------------------------------
+//      Define the format functions used by printf/scanf.
+//      Default is auto formatting.
+//      Remove appropriate comment(s) to get desired formatting
+//      if used from command line.
+//-------------------------------------------------------------------------
+
+//-e_PrintfTiny=_Printf
+//-e_PrintfSmall=_Printf
+//-e_PrintfSmallNoMb=_Printf
+//-e_PrintfLarge=_Printf
+//-e_PrintfLargeNoMb=_Printf
+//-e_PrintfFull=_Printf
+
+//-e_PrintfFullNoMb=_Printf
+
+//-e_ScanfSmall=_Scanf
+//-e_ScanfSmallNoMb=_Scanf
+//-e_ScanfLarge=_Scanf
+//-e_ScanfLargeNoMb=_Scanf
+//-e_ScanfFull=_Scanf
+
+//-e_ScanfFullNoMb=_Scanf
+
+//-------------------------------------------------------------------------
+//      Define replacement of the default library math functions.
+//      Choose either of: 
+//      1) smaller and faster versions
+//      2) more accurate versions 
+//      Remove appropriate comment(s) from either
+//      1) or 2), but not both, if used from command line.
+//-------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------
+// 1) Smaller and faster versions
+//-------------------------------------------------------------------------
+//-e__iar_sin_small=sin
+//-e__iar_cos_small=cos
+//-e__iar_tan_small=tan
+//-e__iar_log_small=log
+//-e__iar_log10_small=log10
+//-e__iar_exp_small=exp
+//-e__iar_pow_small=pow
+//-e__iar_Sin_small=__iar_Sin
+//-e__iar_sin_smallf=sinf
+//-e__iar_cos_smallf=cosf
+//-e__iar_tan_smallf=tanf
+//-e__iar_log_smallf=logf
+//-e__iar_log10_smallf=log10f
+//-e__iar_exp_smallf=expf
+//-e__iar_pow_smallf=powf
+//-e__iar_Sin_smallf=__iar_Sinf
+//-e__iar_sin_smalll=sinl
+//-e__iar_cos_smalll=cosl
+//-e__iar_tan_smalll=tanl
+//-e__iar_log_smalll=logl
+//-e__iar_log10_smalll=log10l
+//-e__iar_exp_smalll=expl
+//-e__iar_pow_smalll=powl
+//-e__iar_Sin_smalll=__iar_Sinl
+
+//-------------------------------------------------------------------------
+// 2) More accurate versions
+//-------------------------------------------------------------------------
+-e__iar_sin_accurate=sin
+-e__iar_cos_accurate=cos
+-e__iar_tan_accurate=tan
+-e__iar_pow_accurate=pow
+-e__iar_Sin_accurate=__iar_Sin
+-e__iar_Pow_accurate=__iar_Pow
+-e__iar_sin_accuratef=sinf
+-e__iar_cos_accuratef=cosf
+-e__iar_tan_accuratef=tanf
+-e__iar_pow_accuratef=powf
+-e__iar_Sin_accuratef=__iar_Sinf
+-e__iar_Pow_accuratef=__iar_Powf
+-e__iar_sin_accuratel=sinl
+-e__iar_cos_accuratel=cosl
+-e__iar_tan_accuratel=tanl
+-e__iar_pow_accuratel=powl
+-e__iar_Sin_accuratel=__iar_Sinl
+-e__iar_Pow_accuratel=__iar_Powl
+
+//-------------------------------------------------------------------------
+//      Define if row buffering should be used by terminal output.
+//      Default is no buffering.
+//      Remove comment to get buffered terminal output if used from command line.
+//-------------------------------------------------------------------------
+//-e__write_buffered=__write
+
+///////////////////////////////////////////////////////////////////////////
+//      Allocate the read only segments that are mapped to ROM.
+///////////////////////////////////////////////////////////////////////////
+
+-Z(CODE)INTVEC=00000000-00000D4F
+
+//-------------------------------------------------------------------------
+//      BREL_CBASE is an empty placeholer segment, it should be placed in
+//      front of the BREL_C/BREL23_C segments holding constant data.
+//-------------------------------------------------------------------------
+-Z(CONST)NEAR_C=FEDFB000-FEDFB3FF
+-Z(CONST)BREL_CBASE,BREL_C,BREL23_C=FEDFB400-FEDFBB00
+-Z(CONST)HUGE_C=FEDF6000-FEDFAFFF
+-Z(CODE)CSTART,RCODE,ICODE,TRAPVEC,DIFUNCT=FEDFA000-FEDFAFFF
+-Z(CONST)SADDR7_ID,SADDR8_ID,NEAR_ID,BREL_ID,BREL23_ID,HUGE_ID=FEDFA000-FEDFAFFF
+-Z(CONST)CLTVEC,SYSCALLVEC=FEDF9D50-FEDF9FFF
+
+-Z(CODE)CLTCODE,SYSCALLCODE,CODE=FEDF6000-FEDFAFFF
+
+//-------------------------------------------------------------------------
+//      The CHECKSUM segment must be defined when ROM checksum should
+//      be generated.
+//-------------------------------------------------------------------------
+-Z(CONST)CHECKSUM=0007FFFC-0007FFFF
+
+///////////////////////////////////////////////////////////////////////////
+//      Allocate the read/write segments that are mapped to RAM.
+///////////////////////////////////////////////////////////////////////////
+
+//-------------------------------------------------------------------------
+//      Short loads relative from EP with 7 and 8 bit offset.
+//
+//      SADDR_BASE is an empty segment that mark the beginning of the saddr
+//      data segments.
+//-------------------------------------------------------------------------
+-Z(DATA)SADDR_BASE=FEDFB000
+-Z(DATA)SADDR7_I,SADDR7_Z,SADDR7_N=FEDFB000-FEDFB07F
+-Z(DATA)SADDR8_I,SADDR8_Z,SADDR8_N=FEDFB000-FEDFB0FF
+
+//-------------------------------------------------------------------------
+//      BREL_BASE is an empty placeholer segment, it should be placed in
+//      front of the DATA (i.e. RAM) BREL/BREL23 segments.
+//-------------------------------------------------------------------------
+-Z(DATA)BREL_BASE,BREL_I,BREL_Z,BREL_N,BREL23_I,BREL23_Z,BREL23_N=FEDF6000-FEDFFFFF
+
+//-------------------------------------------------------------------------
+//      Global and 32-bit offset from GP.
+//      The rest of the external memory (all external memory not used
+//      by BREL segment variables) is addressed with HUGE memory model.
+//-------------------------------------------------------------------------
+//-Z(DATA)HUGE_I,HUGE_Z,HUGE_N=FEDF5FFC-FEDF5FFC  // No memory availabale
+-Z(DATA)HUGE_I,HUGE_Z,HUGE_N=FEDF6000-FEDFFFFF  // No memory availabale
+
+//-------------------------------------------------------------------------
+//      Data relative from zero with 16 bit offset.
+//      This segment is for TINY data model. All internal memory, SFR,
+//      and CONST variables in area 0000-7FFF may be accessed.
+//-------------------------------------------------------------------------
+-Z(DATA)NEAR_Z,NEAR_I,NEAR_N=FEDF5FFC-FEDF5FFC  // No memory availabale
+
+//-------------------------------------------------------------------------
+//      The stack and the heap.
+//-------------------------------------------------------------------------
+-Z(DATA)CSTACK+_CSTACK_SIZE,HEAP+_HEAP_SIZE=FEDF6000-FEDFFFFF
+
+//-------------------------------------------------------------------------
+//      End of File
+//-------------------------------------------------------------------------

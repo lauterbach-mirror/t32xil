@@ -1,0 +1,38 @@
+; --------------------------------------------------------------------------------
+; @Title: Load target code for TMS320F28335 from TI
+; @Description:
+;   Load target code for TMS320F28335 from TI. The application is
+;   loaded into SRAM. If tracing is supported, the trace is configured and
+;   enabled. The demo works both with the evaluation boards and the TRACE32
+;   Instruction Set Simulator.
+; @Keywords: C2000, C28x
+; @Author: CSA
+; @Board: 
+; @Chip: TMS320F28335
+; @Copyright: (C) 1989-2018 Lauterbach GmbH, licensed for use with TRACE32(R) only
+; --------------------------------------------------------------------------------
+; $Id: trace32_arm_hercules_rm57_startup.cmm 1346 2016-09-21 14:09:25Z csax $
+
+HELP.Filter.Add intsimulink
+
+ENTRY %LINE &ELF_FILE  ;do not modify this line
+
+IF (!OS.FILE(&ELF_FILE))
+(
+    PRINT %ERROR "The target binary location must be passed to the script."
+    ENDDO
+)
+
+RESet
+SYStem.RESet
+SYStem.CPU F28335
+SYStem.Up
+
+Data.LOAD "&ELF_FILE"
+Mode.Mix
+List.Mix
+
+; Do not start the target, if stack profiling is enabled
+Go
+
+ENDDO

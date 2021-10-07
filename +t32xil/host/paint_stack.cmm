@@ -1,0 +1,48 @@
+; --------------------------------------------------------------------------------
+; @Title: Paint the program stack
+; @Description:
+;   Fill the stack of an application with a pattern. Target must be halted at the
+;   application's entry point to mark the stack memory area.
+;
+; @Keywords: PIL Processor-in-the-Loop Simulink MATLAB model-based
+; @Author: CSA, MBU
+; @Copyright: (C) 1989-2016 Lauterbach GmbH, licensed for use with TRACE32(R) only
+; --------------------------------------------------------------------------------
+; $Id: paint_stack.cmm 3265 2018-11-22 08:50:35Z csax $
+
+
+; --------------------------------------------------------------------------------
+; Get and check input parameters
+; --------------------------------------------------------------------------------
+PARAMETERS &parameters
+
+PRIVATE &start_address  // Start address of the stack memory area
+&start_address=STRing.SCANAndExtract("&parameters","START_ADDRESS=","")
+
+PRIVATE &end_address  // End address of the stack memory area
+&end_address=STRing.SCANAndExtract("&parameters","END_ADDRESS=","")
+
+PRIVATE &pattern  // Marker byte pattern
+&pattern=STRing.SCANAndExtract("&parameters","PATTERN=","")
+
+; --------------------------------------------------------------------------------
+; Mark the stack
+; --------------------------------------------------------------------------------
+IF STATE.RUN()
+(
+  PRINT %ERROR "Core must be halted for stack profiling."
+  ENDDO FALSE()
+)
+
+IF (&start_address>&end_address)
+(
+  Data.Set &end_address--&start_address &pattern
+)
+ELSE
+(
+  Data.Set &start_address--&end_address &pattern
+)
+
+Go
+
+ENDDO TRUE()

@@ -1,0 +1,63 @@
+; --------------------------------------------------------------------------------
+; @Title: Load target code for RM57L843 Hercules Board from TI
+; @Description:
+;   Load target code for RM57L843 Hercules Board from TI. The application is
+;   loaded into SRAM. If tracing is supported, the trace is configured and
+;   enabled. The demo works both with the evaluation boards and the TRACE32
+;   Instruction Set Simulator.
+; @Keywords: Cortex-R4, CortexR4, RM57*
+; @Author: CSA, MBU
+; @Board: Hercules
+; @Chip: RM57L843-ZWT
+; @Copyright: (C) 1989-2015 Lauterbach GmbH, licensed for use with TRACE32(R) only
+; --------------------------------------------------------------------------------
+; $Id$
+
+HELP.Filter.Add intsimulink
+
+ENTRY %LINE &ELF_FILE  ;do not modify this line
+
+IF (!OS.FILE(&ELF_FILE))
+(
+    PRINT %ERROR "The target binary location must be passed to the script."
+    ENDDO
+)
+
+RESet
+SYStem.RESet
+SYStem.CPU RM57L843-ZWT
+IF VERSION.BUILD()<61226.
+(
+	SYStem.CONFIG.FUNNEL1.Base DAP:0x8000B000
+	SYStem.CONFIG.FUNNEL1.ATBSource ETM 0
+	SYStem.CONFIG.TPIU ATBSource FUNNEL1
+)
+SYStem.Option.ResBreak OFF
+SYStem.JtagClock CTCK 10MHz
+ETM.OFF                        ; ETM must stay off, till access to TPIU is unlocked 
+SYStem.Up
+
+; Enable the program trace if available
+IF (!INTERFACE.SIM()&&Analyzer())
+(
+	; Enable TPIU, by setting input clock to VCLK
+	Data.Set APB:0x80003404 %Long 0x00000001	
+
+	Trace.METHOD Analyzer
+	TPIU.PortSize 32
+	TPIU.PortMode Bypass
+	ETM.Trace ON
+	ETM.ON
+	Analyzer.AutoFocus
+)
+; Init ECC
+Data.Set 0x08000000++0xffff %Long 0x0
+
+Data.LOAD "&ELF_FILE"
+Mode.Mix
+List.Mix
+
+; Do not start the target, if stack profiling is enabled
+Go
+
+ENDDO

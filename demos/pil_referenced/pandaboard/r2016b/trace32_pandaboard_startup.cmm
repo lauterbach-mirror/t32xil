@@ -1,0 +1,102 @@
+; --------------------------------------------------------------------------------
+; @Title: Load target code for OMAP4430 on PandaBoard
+; @Description:
+;   Load target code for PandaBoard. The application is
+;   loaded into SRAM. If tracing is supported, the trace is configured and
+;   enabled. The demo works both with the evaluation boards and the TRACE32
+;   Instruction Set Simulator.
+; @Keywords: ARM, Cortex-A9, ETM
+; @Author: AME
+; @Board: PANDABOARD
+; @Chip: OMAP4430
+; @Copyright: (C) 1989-2017 Lauterbach GmbH, licensed for use with TRACE32(R) only
+; --------------------------------------------------------------------------------
+; $Id$
+
+HELP.Filter.Add intsimulink
+
+ENTRY %LINE &ELF_FILE  ;do not modify this line
+
+IF (!OS.FILE(&ELF_FILE))
+(
+    PRINT %ERROR "The target binary location must be passed to the script."
+    ENDDO
+)
+
+PRIVATE &ppd
+&ppd=OS.PPD()
+IF !OS.FILE("&ppd/u-boot-spl")
+(
+  COPY "../../../../targets/pandaboard/u-boot-spl.gz" "&ppd/u-boot-spl.gz"
+  UNZIP "&ppd/u-boot-spl.gz" "&ppd/u-boot-spl"
+)
+
+IF !INTERFACE.SIM()
+(
+  ; --------------------------------------------------------------------------------
+  ; initialize and start the debugger
+  RESet
+  SYStem.RESet
+  SYStem.CPU OMAP4430
+  SYStem.JtagClock CTCK 10MHz
+  Trace.DISable
+  CORE.ASSIGN 1.
+  SYStem.Up
+
+  ; --------------------------------------------------------------------------------
+  ; execute BootROM, run MLO/U-Boot-SPL for board setup
+  Go
+  WAIT 1.s
+  Break
+  Data.LOAD.Elf "~~~~/u-boot-spl"
+  Go spl_boot_device
+  WAIT !STATE.RUN()
+)
+
+; --------------------------------------------------------------------------------
+; initialize and start the debugger
+RESet
+SYStem.RESet
+SYStem.CPU OMAP4430
+SYStem.JtagClock CTCK 10MHz
+Trace.DISable
+CORE.ASSIGN 1.
+SYStem.Up
+
+System.MemAccess.DAP
+System.CpuAccess Enable
+
+; --------------------------------------------------------------------------------
+; initialize OFFCHIP trace if Analyzer is plugged (ETM)
+IF !INTERFACE.SIM()&&Analyzer()
+(
+  ; set PinMux and enable Clocks
+  ; configure PAD: EMU[2:19] for 16-bit TPIU (PADx_DPM_EMUx)
+  Data.Set 0x4A1001B0 %Long Data.Long(SD:0x4A1001B0)&0x0000FFFF
+  Data.Set 0x4A1001B4 %Long 0x0
+  Data.Set 0x4A1001B8 %Long 0x0
+  Data.Set 0x4A1001BC %Long 0x0
+  Data.Set 0x4A1001C0 %Long 0x0
+  Data.Set 0x4A1001C4 %Long 0x0
+  Data.Set 0x4A1001C8 %Long 0x0
+  Data.Set 0x4A1001CC %Long 0x0
+  Data.Set 0x4A1001D0 %Long 0x0
+  Data.Set 0x4A1001d4 %Long 0x0
+
+  Trace.Method Analyzer
+  TPIU.PortSize 16a
+  TPIU.PortMode Continuous
+  ETM.Trace ON
+  ETM.ON
+  ; use Autofocus based calibration
+  Analyzer.AutoFocus
+)
+
+Data.LOAD "&ELF_FILE"
+Mode.Mix
+List.Mix
+
+; Do not start the target, if stack profiling is enabled
+Go
+
+ENDDO

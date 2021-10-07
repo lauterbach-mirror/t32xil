@@ -1,0 +1,51 @@
+; --------------------------------------------------------------------------------
+; @Title:           Demo for TRACE32 Integration for Simulink
+; @Description: 
+;   Startup script for V850 code generation demo. The demo works both with
+;   V850 evaluation boards and the TRACE32 Instruction Set Simulator.
+;   Except the first ENTRY line the script may be adapted by the user.
+; @Keywords: MATLAB Simulink 
+; @Author: MBU
+; @Board: V850*
+; @Chip: V850*
+; @Copyright: (C) 1989-2015 Lauterbach GmbH, licensed for use with TRACE32(R) only
+; --------------------------------------------------------------------------------
+; $Id: trace32_70f3506_startup.cmm 3410 2019-01-18 12:27:46Z csax $
+
+HELP.Filter.Add intsimulink
+
+ENTRY %LINE &ELF_FILE  ;do not modify this line
+
+IF (!OS.FILE(&ELF_FILE))
+(
+    PRINT %ERROR "The target binary location must be passed to the script."
+    ENDDO
+)
+
+RESet
+WinCLEAR
+AREA
+SYStem
+SYStem.CPU 70f3506
+
+SYStem.Up
+
+IF !SIMULATOR()
+(
+    SYStem.JtagClock 10.MHz
+    SYStem.MemAccess CPU
+    SETUP.VAR %STanDard %E
+    sys.log.size 100000.
+    data.log
+)
+
+Data.Set 0xFEDF6000--0xFEDFFFFF 0   // avoid ECC errors
+Data.LOAD "&ELF_FILE"
+
+Mode.Mix
+List.Mix
+
+; Do not start the target, if stack profiling is enabled
+Go
+
+ENDDO

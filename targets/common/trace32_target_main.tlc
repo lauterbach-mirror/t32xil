@@ -1,0 +1,104 @@
+%%        TRACE32 Integration for Simulink
+%%    Copyright (c) 2012-2015 Lauterbach GmbH
+%%              All rights reserved
+
+%selectfile NULL_FILE
+
+%function SLibTRACE32GenerateMain(fName) void
+
+    %if (NumContStates > 0)
+        %exit Model has continuous states
+    %endif
+
+    %openfile SrcBuffer
+    /* Auto generated main program for model : %<FcnMdlName()>
+     * Real-Time Workshop version : %<Version>
+     * C source code generated on : %<GeneratedOn> (TLC: %<TLC_TIME>) */
+    %closefile SrcBuffer
+
+    %assign cFile = SLibAddModelFile("SystemBody", "Simulink", fName)
+
+    %<SLibSetModelFileAttribute(cFile, "Banner", SrcBuffer)>
+
+    %openfile SrcBuffer
+    #include "%<FcnGetPublicModelHeaderFile()>"
+    %closefile SrcBuffer
+
+    %<SLibSetModelFileAttribute(cFile, "Includes", SrcBuffer)>
+
+    %openfile SrcBuffer
+    %<SLibSingleMultiTask()>
+
+    void main(void)
+    {
+        volatile int i;
+
+        System_INIT();
+
+        while (1) {
+            i = 0;
+            while (i < 100000)
+                i++;
+            System_STEP();
+        }
+    }
+    %closefile SrcBuffer
+
+    %<SLibSetModelFileAttribute(cFile, "Functions", SrcBuffer)>
+
+%endfunction
+
+
+%function SLibSingleMultiTask() Output
+
+    void System_INIT(void) 
+    {
+        %<FcnMdlName()>_initialize(%<SLibModelFcnArgs("Initialize",TLC_TRUE,"")>);
+    }
+
+    void System_STEP(void)
+    {
+
+    %assign SingleTasking = SLibSingleTasking()
+    %assign FcnCall = FEVAL("aux_1", 1)
+
+    %if NumSynchronousSampleTimes == 1
+        %<FcnCallMdlStep("")>
+    %elseif !SingleTasking
+        %assign tid01Eq = FixedStepOpts.TID01EQ
+        %assign rootSystem.CurrentTID = 0
+
+        boolean_T eventFlags[%<FcnNumST()>];
+        %if (FcnNumST() - tid01Eq) > 2
+        int_T j;
+        %endif
+
+        %if (FcnCall == 1)
+            %<FcnCallEventFlagsFunction()>
+        %else
+            %<FcnCallEventFlagsFunction("%<Name>_")>
+        %endif
+
+        %<FcnCallMdlStep(0)>
+
+        %if (FcnNumST() - tid01Eq) > 2
+            for (j = %<1+tid01Eq>; j < %<FcnNumST()>; j++) {
+                if (eventFlags[j]) {
+                    %<FcnCallMdlStep("j")>
+                }
+            }
+        %else
+            %assign tid = FcnNumST() - 1
+            %assign rootSystem.CurrentTID = tid
+            if (eventFlags[%<tid>]) {
+                %<FcnCallMdlStep(tid)>
+            }
+        %endif
+
+    %else
+        %<FcnCallMdlStep(0)>
+    %endif
+
+    }
+
+%endfunction

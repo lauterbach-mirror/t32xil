@@ -1,0 +1,11 @@
+%%        TRACE32 Integration for Simulink
+%%    Copyright (c) 2012-2015 Lauterbach GmbH
+%%              All rights reserved
+
+%selectfile NULL_FILE
+
+%<LibSetCodeTemplateComplianceLevel(2)>
+
+%if ((CodeFormat == "Embedded-C") && (CompiledModel.ModelReferenceTargetType == "NONE"))
+    %<SLibTRACE32GenerateMain("trace32_main")>
+%endif

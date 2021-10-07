@@ -1,0 +1,68 @@
+; --------------------------------------------------------------------------------
+; @Title:      Demo for TRACE32 Integration for Simulink, startup script template
+; @Description:
+;   Except the first ENTRY line the script may be adapted by the user.
+; @Keywords: MATLAB Simulink 
+; @Props: Template NoWelcome NoIndex
+; @Author: MOA
+; @Board: -
+; @Copyright: (C) 1989-2015 Lauterbach GmbH, licensed for use with TRACE32(R) only
+; --------------------------------------------------------------------------------
+; $Id: trace32_startup_template.cmm 3410 2019-01-18 12:27:46Z csax $
+
+
+ENTRY  &CPUTYPE  %LINE &TARGETBINARY_WITHPATH  ;do not modify this line
+
+
+IF ("&CPUTYPE"=="")||!OS.FILE("&TARGETBINARY_WITHPATH")
+(
+    PRINT %ERROR "CPU type and target binary location must be passed to the script."
+    ENDDO
+)
+
+; simple startup code example
+
+RESet
+WinCLEAR
+AREA
+SYStem
+SYStem.CPU &CPUTYPE
+SYStem.Up
+Data.LOAD "&TARGETBINARY_WITHPATH"
+Mode.Mix
+List.Mix
+Go
+
+ENDDO
+
+
+; more complex startup code example with cpu selection:
+;
+;  RESet
+;  WinCLEAR
+;  AREA
+;  SYStem
+;
+;  DIALOG
+;  (
+;      HEADER "CPU Selection"
+;      POS  2. 1. 28.
+;      TEXT "Please adjust your target CPU and click OK."
+;      POS 10. 3.  9.
+;      USERCPU: EDIT "MPC5554" ""
+;      POS 11. 5.  7.
+;      DEFBUTTON "OK" "continue"
+;      POS 11. 6.  7.
+;      TEXT " "
+;  )
+;  STOP
+;  &USER_CPU=DIALOG.STRING(USERCPU)
+;  DIALOG.END
+;
+;  SYStem.CPU &USER_CPU
+;  SYStem.Up
+;  Data.LOAD "&TARGETBINARY_WITHPATH"
+;  List.Mix
+;  Go
+;
+;  ENDDO

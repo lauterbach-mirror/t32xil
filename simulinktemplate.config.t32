@@ -1,0 +1,73 @@
+; --------------------------------------------------------------------------------
+; @Title: TRACE32 configuration file for TRACE32 Integration for Simulink
+; @Description: 
+;   !ToDo! Adapt to your configuration according to:
+;    (1): Switch between TRACE32 Simulator and attached USB or Ethernet Debugger
+;         Just one PBI setting is allowed, please comment out the other ones.
+;    (2): Set SYS and TMP to your Trace32 installation directory and temporary
+;         directory. The SYS directory is used to find the fcc and T32 API files.
+;    (3): Set 2 different and usable UDP ports of your host. The default
+;         setting will be OK for most cases.
+;    (4): Set 1 TCP port of your host. The default setting will be OK
+;         for most cases.
+;   
+; @Keywords: PIL Processor-in-the-Loop Simulink MATLAB model-based
+; @Author: MBU, CSA
+; @Copyright: (C) 1989-2018 Lauterbach GmbH, licensed for use with TRACE32(R) only
+; --------------------------------------------------------------------------------
+; $Id: simulinktemplate.config.t32 3724 2019-05-17 07:36:56Z csax $
+
+
+; --------------------------(1)------------------------------
+; Use simulator instead of attached debugger
+PBI=SIM
+
+; Alternative 1: Borrow simulator license from cable-based license
+;                via USB
+;PBI=*SIM
+;USB
+;INSTANCE=AUTO
+
+; Alternative 2: Borrow simulator license from cable-based license
+;                via Ethernet
+;PBI=*SIM
+;NET
+;NODE=127.0.0.1
+;INSTANCE=AUTO
+
+; Alternative 3: USB debugger:
+;PBI=
+;USB
+
+; Alternative 4, Ethernet debugger:
+;PBI=
+;NET
+;NODE=127.0.0.1  ; Change to IP of your Ethernet Debugger
+;PACKLEN=1024
+
+; --------------------------(2)------------------------------
+OS=
+ID=TRACE32
+SYS=C:\T32
+;TMP=C:\T32\temp  ; Not necessary (uses OS temp directory then)
+
+PRINTER=WINDOWS
+
+;LICENSE=
+;RLM_LICENSE=port@host  ; Change to active RLM license server
+
+; --------------------------(3)------------------------------
+RCL=NETASSIST
+; Port for basic communication with Simulink
+PORT=20000
+PACKLEN=1024
+
+RCL=NETASSIST
+; Port for rtIOstream communication with Simulink
+PORT=20001
+PACKLEN=1024
+
+; --------------------------(4)------------------------------
+SIMULINK=NETASSIST
+; Port for code-to-model navigation
+PORT=20000

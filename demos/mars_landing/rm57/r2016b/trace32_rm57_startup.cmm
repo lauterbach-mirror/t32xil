@@ -1,0 +1,115 @@
+; --------------------------------------------------------------------------------
+; @Title: Load target code for RM57L843 Hercules Board from TI
+; @Description:
+;   Load target code for RM57L843 Hercules Board from TI. The application is
+;   loaded into SRAM. If tracing is supported, the trace is configured and
+;   enabled. The demo works both with the evaluation boards and the TRACE32
+;   Instruction Set Simulator.
+; @Keywords: Cortex-R4, CortexR4, RM57*
+; @Author: CSA, MBU
+; @Board: Hercules
+; @Chip: RM57L843-ZWT
+; @Copyright: (C) 1989-2015 Lauterbach GmbH, licensed for use with TRACE32(R) only
+; --------------------------------------------------------------------------------
+; $Id: trace32_arm_hercules_rm57_startup.cmm 1346 2016-09-21 14:09:25Z csax $
+
+HELP.Filter.Add intsimulink
+
+ENTRY %LINE &ELF_FILE  ;do not modify this line
+
+IF (!OS.FILE(&ELF_FILE))
+(
+    PRINT %ERROR "The target binary location must be passed to the script."
+    ENDDO
+)
+
+RESet
+SYStem.RESet
+SYStem.CPU RM57L843-ZWT
+
+IF VERSION.BUILD()<61226.
+(
+	SYStem.CONFIG.FUNNEL1.Base DAP:0x8000B000
+	SYStem.CONFIG.FUNNEL1.ATBSource ETM 0
+	SYStem.CONFIG.TPIU ATBSource FUNNEL1
+)
+
+; --------------------------------------------------------------------------------
+; These settings stop the CPU at the RESET Vector
+; --------------------------------------------------------------------------------
+SYStem.Option EnReset OFF
+SYStem.Option ICEPICK SystemReset.ON
+SYStem.Option ICEPICK WaitInReset.ON
+SYStem.MemAccess DAP
+SYStem.JtagClock CTCK 10MHz
+SYStem.Up
+
+; --------------------------------------------------------------------------------
+; Setup CTI to freeze peripherals while debugging
+GOSUB CtiSetup
+; --------------------------------------------------------------------------------
+
+
+; Enable the program trace if available
+IF (!INTERFACE.SIM()&&Analyzer())
+(
+	; Enable TPIU, by setting input clock to VCLK
+	Data.Set APB:0x80003404 %Long 0x00000001	
+
+	Trace.METHOD Analyzer
+	TPIU.PortSize 32
+	TPIU.PortMode Bypass
+	ETM.Trace ON
+	ETM.ON
+	Analyzer.AutoFocus
+)
+; Init ECC
+Data.Set 0x08000000++0xffff %Quad 0x0
+
+Data.LOAD "&ELF_FILE"
+Mode.Mix
+List.Mix
+
+; Do not start the target, if stack profiling is enabled
+Go
+
+ENDDO
+
+; --------------------------------------------------------------------------------
+
+CtiSetup: ;()
+(
+  &CoreCtiBase=COMPonent.BASE("CTI",0.)
+  &CoreCtiBase=CONVert.ADDRESSTODUALPORT(&CoreCtiBase)
+  &PeriphCtiBase=EDAP:0x8000a000
+
+  ; <do not change>
+  ; MAP CR5-"Core-Stopped" (CTITRIGIN7) to CTM Channel 2
+  Data.Set &CoreCtiBase+0x3c %Long 0x4
+  ; ensure CTM2 is not GATED
+  Data.Set &CoreCtiBase+0x40 %Long Data.Long(&CoreCtiBase+0x40)|0x4
+  ; enable CR5-CTI
+  Data.Set &CoreCtiBase+0x00 %Long 0x1
+  ; </do not change>
+
+  ; <user config>
+  ; the following Data.Set's connect "Core-Stopped" signal to the
+  ; listed peripherals
+  ; L2FMC, CCMR5, CRCx, and SYS modules
+  Data.Set &PeriphCtiBase+0xa0 %Long 0x4
+  ; DMA, RTIx, AWMx, HTUx, SCIx, LINx, I2Cx, EMAC, EQEP, ECAP, DMM and DCCx modules
+  Data.Set &PeriphCtiBase+0xa4 %Long 0x4
+  ; DCANx
+  Data.Set &PeriphCtiBase+0xa8 %Long 0x4
+  ; ETPWMx
+  Data.Set &PeriphCtiBase+0xac %Long 0x4
+  ; </user config>
+  ; <do not change>
+  ; ensure CTM2 is not GATED
+  Data.Set &PeriphCtiBase+0x40 %Long Data.Long(&CoreCtiBase+0x40)|0x4
+  ; enable PERIPH-CTI
+  Data.Set &PeriphCtiBase+0x00 %Long 0x1
+  ; </do not change>
+
+  RETURN
+)

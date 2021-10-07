@@ -1,0 +1,61 @@
+; --------------------------------------------------------------------------------
+; @Title: Load target code for MPC5646C board from Lauterbach (LA-3858)
+; @Description:
+;   Load target code for MPC5646C board from Lauterbach. The application is
+;   loaded into Flash. If tracing is supported, the trace is configured and
+;   enabled. The demo works both with the board and the TRACE32
+;   Instruction Set Simulator.
+; @Keywords: MPC56*
+; @Author: CSA, MBU
+; @Board: LA-3858
+; @Chip: MPC5646C
+; @Copyright: (C) 1989-2016 Lauterbach GmbH, licensed for use with TRACE32(R) only
+; --------------------------------------------------------------------------------
+; $Id: trace32_mpc_5646c_startup.cmm 1346 2016-09-21 14:09:25Z csax $
+
+HELP.Filter.Add intsimulink
+
+ENTRY %LINE &ELF_FILE  ;do not modify this line
+
+IF (!OS.FILE(&ELF_FILE))
+(
+    PRINT %ERROR "The target binary location must be passed to the script."
+    ENDDO
+)
+
+RESet
+SYStem.RESet
+SYStem.CPU MPC5646C
+SYStem.Up
+SYStem.Option.DisMode VLE
+
+IF (!INTERFACE.SIM())
+(
+  ; Program application to Flash
+  DO ~~\demo\powerpc\flash\jpc564xbc.cmm PREPAREONLY
+
+  FLASH.ReProgram ALL /Erase
+  Data.LOAD "&ELF_FILE"
+  FLASH.ReProgram OFF
+  SYStem.Up
+  SYStem.MemAccess NEXUS
+)
+ELSE
+(
+  Data.LOAD "&ELF_FILE"
+)
+
+; Support runtime memory accesses
+SETUP.VAR %STanDard %E
+SYStem.CpuAccess Enable
+SYStem.Option.DUALPORT ON
+TRANSlation.Create 0x0--0xffffffff 0x0
+TRANSlation.ON
+
+Mode.Mix
+List.Mix
+
+; Do not start the target, if stack profiling is enabled
+Go
+
+ENDDO
