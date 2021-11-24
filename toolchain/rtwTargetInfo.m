@@ -14,7 +14,7 @@
 % @Author: CSA
 % @Copyright: (C) 1989-2019 Lauterbach GmbH, licensed for use with TRACE32(R) only
 % --------------------------------------------------------------------------------
-% $Id: rtwTargetInfo.m 3513 2019-02-25 09:13:32Z csax $
+% $Id: rtwTargetInfo.m 5825 2021-11-19 08:35:56Z csax $
 
 %% Callback to detect the custom toolchains
 function rtwTargetInfo(tr)
@@ -46,6 +46,12 @@ function config = loc_createToolchain
     config(4).FileName = fullfile(fileparts(mfilename('fullpath')), 't32xil_tc_tasking_ctc.mat');
     config(4).TargetHWDeviceType = {'Infineon->TriCore'};
     config(4).Platform  = {computer('arch')};
+
+    config(5) = coder.make.ToolchainInfoRegistry;
+    config(5).Name = 'TRACE32 XIL HighTec TriCore Development Platform | gmake makefile';
+    config(5).FileName = fullfile(fileparts(mfilename('fullpath')), 't32xil_tc_hightec_tricore_gcc.mat');
+    config(5).TargetHWDeviceType = {'Infineon->TriCore'};
+    config(5).Platform  = {computer('arch')};
 
     % To register more custom toolchains:
     % 1) Copy and paste the five preceding 'config' lines.

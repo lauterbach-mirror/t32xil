@@ -9,7 +9,7 @@
 % @Author: CSA
 % @Copyright: (C) 1989-2019 Lauterbach GmbH, licensed for use with TRACE32(R) only
 % --------------------------------------------------------------------------------
-% $Id: RegisterToolchains.m 5586 2021-09-09 15:28:27Z csax $
+% $Id: RegisterToolchains.m 5576 2021-09-09 12:08:40Z csax $
 
 function RegisterToolchains(~)
     % Get custom toolchains
