@@ -15,7 +15,7 @@
 ; @Author: MBU, CSA
 ; @Copyright: (C) 1989-2018 Lauterbach GmbH, licensed for use with TRACE32(R) only
 ; --------------------------------------------------------------------------------
-; $Id: simulinktemplate.config.t32 3724 2019-05-17 07:36:56Z csax $
+; $Id: simulinktemplate.config.t32 5988 2022-01-28 16:56:46Z csax $
 
 
 ; --------------------------(1)------------------------------
@@ -24,26 +24,26 @@ PBI=SIM
 
 ; Alternative 1: Borrow simulator license from cable-based license
 ;                via USB
-;PBI=*SIM
-;USB
-;INSTANCE=AUTO
+; PBI=*SIM
+; USB
+; INSTANCE=AUTO
 
 ; Alternative 2: Borrow simulator license from cable-based license
 ;                via Ethernet
-;PBI=*SIM
-;NET
-;NODE=127.0.0.1
-;INSTANCE=AUTO
+; PBI=*SIM
+; NET
+; NODE=127.0.0.1
+; INSTANCE=AUTO
 
 ; Alternative 3: USB debugger:
-;PBI=
-;USB
+; PBI=
+; USB
 
 ; Alternative 4, Ethernet debugger:
-;PBI=
-;NET
-;NODE=127.0.0.1  ; Change to IP of your Ethernet Debugger
-;PACKLEN=1024
+; PBI=
+; NET
+; NODE=127.0.0.1  ; Change to IP of your Ethernet Debugger
+; PACKLEN=1024
 
 ; --------------------------(2)------------------------------
 OS=
@@ -53,8 +53,8 @@ SYS=C:\T32
 
 PRINTER=WINDOWS
 
-;LICENSE=
-;RLM_LICENSE=port@host  ; Change to active RLM license server
+; LICENSE=
+; RLM_LICENSE=<pot>@<server>
 
 ; --------------------------(3)------------------------------
 RCL=NETASSIST
@@ -70,4 +70,4 @@ PACKLEN=1024
 ; --------------------------(4)------------------------------
 SIMULINK=NETASSIST
 ; Port for code-to-model navigation
-PORT=20000
+PORT=20002
