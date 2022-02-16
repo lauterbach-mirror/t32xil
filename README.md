@@ -1,4 +1,4 @@
-![TRACE32 PIL Testing](https://gitlab.com/lauterbach/resources/raw/master/img/t32xil_banner_900x90.jpg)
+![TRACE32 PIL Testing](https://gitlab.com/lauterbach/resources/raw/master/img/t32xil_banner_900x182.jpg)
 
 ## Overview
 
