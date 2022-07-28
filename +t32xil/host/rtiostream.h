@@ -1,7 +1,8 @@
 //!< @file rtiostream.h
 //!< Copyright (c) 2012-2021 Lauterbach GmbH
 
-#pragma once
+#ifndef RTIOSTREAM_H__
+#define RTIOSTREAM_H__
 
 #define DLL_PUBLIC_API  __declspec(dllexport)
 
@@ -12,3 +13,5 @@ DLL_PUBLIC_API int rtIOStreamClose(int streamID);
 
 DLL_PUBLIC_API int debugioOpen(int argc, void *argv[]);
 DLL_PUBLIC_API int debugioClose(void);
+
+#endif

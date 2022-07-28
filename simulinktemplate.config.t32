@@ -15,7 +15,7 @@
 ; @Author: MBU, CSA
 ; @Copyright: (C) 1989-2018 Lauterbach GmbH, licensed for use with TRACE32(R) only
 ; --------------------------------------------------------------------------------
-; $Id: simulinktemplate.config.t32 5988 2022-01-28 16:56:46Z csax $
+; $Id: simulinktemplate.config.t32 5989 2022-01-28 17:00:33Z csax $
 
 
 ; --------------------------(1)------------------------------
@@ -54,7 +54,7 @@ SYS=C:\T32
 PRINTER=WINDOWS
 
 ; LICENSE=
-; RLM_LICENSE=<pot>@<server>
+; RLM_LICENSE=<port>@<server>
 
 ; --------------------------(3)------------------------------
 RCL=NETASSIST

@@ -20,6 +20,7 @@ TRACE32 provides debug support for more than 80 microprocessor architectures inc
 - Arm/Cortex
 - Power Architecture
 - RH850
+- RL78
 
 Combining uniform base modules with architecture-specific probes helps to protect the long-term investment in the toolchain and simplifies the portability between different target environments.
 

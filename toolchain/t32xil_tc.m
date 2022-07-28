@@ -8,7 +8,7 @@
 % @Author: MBU, CSA
 % @Copyright: (C) 1989-2016 Lauterbach GmbH, licensed for use with TRACE32(R) only
 % --------------------------------------------------------------------------------
-% $Id: t32xil_tc.m 2717 2018-05-11 08:24:45Z csax $
+% $Id: t32xil_tc.m 6180 2022-04-11 15:53:31Z csax $
 
 
 %% Creates a generic ToolchainInfo object for TRACE32 XIL
@@ -18,9 +18,9 @@ toolchain.Name = 'TRACE32 XIL v1.0 | gmake makefile';
 toolchain.Platform  = computer('arch');
 toolchain.SupportedVersion = '1.0';
 
-toolchain.addAttribute('TransformPathsWithSpaces', 0);  % Escape paths containing spaces if enabled
-toolchain.addAttribute('RequiresCommandFile', 0);  % Handle long archiver/linker calls on Windows systems if enabled
-toolchain.addAttribute('SupportsUNCPaths', 0);  % Support UNC paths on Windows if enabled 
+toolchain.addAttribute('TransformPathsWithSpaces', true);  % Escape paths containing spaces if enabled
+toolchain.addAttribute('RequiresCommandFile', false);  % Handle long archiver/linker calls on Windows systems if enabled
+toolchain.addAttribute('SupportsUNCPaths', false);  % Support UNC paths on Windows if enabled 
 toolchain.addAttribute('SupportsDoubleQuotes', false);  % Wrap path in double quotes if enabled 
 toolchain.addAttribute('RequiresBatchFile', true);  % Creates a batch file that execute the generated makefile if enabled
 

@@ -9,7 +9,7 @@
 % @Author: CSA
 % @Copyright: (C) 1989-2019 Lauterbach GmbH, licensed for use with TRACE32(R) only
 % --------------------------------------------------------------------------------
-% $Id: t32xil_tc_tasking_ctc.m 3496 2019-02-22 12:28:39Z csax $
+% $Id: t32xil_tc_tasking_ctc.m 6172 2022-04-08 07:00:14Z csax $
 
 
 %% Creates a generic ToolchainInfo object for TRACE32 XIL
@@ -19,9 +19,9 @@ toolchain.Name = 'TRACE32 XIL TASKING VX-toolset for TriCore | gmake makefile';
 toolchain.Platform  = computer('arch');
 toolchain.SupportedVersion = 'v6.2r2';
 
-toolchain.addAttribute('TransformPathsWithSpaces', 0);  % Escape paths containing spaces if enabled
-toolchain.addAttribute('RequiresCommandFile', 0);  % Handle long archiver/linker calls on Windows systems if enabled
-toolchain.addAttribute('SupportsUNCPaths', 0);  % Support UNC paths on Windows if enabled 
+toolchain.addAttribute('TransformPathsWithSpaces', true);  % Escape paths containing spaces if enabled
+toolchain.addAttribute('RequiresCommandFile', false);  % Handle long archiver/linker calls on Windows systems if enabled
+toolchain.addAttribute('SupportsUNCPaths', false);  % Support UNC paths on Windows if enabled 
 toolchain.addAttribute('SupportsDoubleQuotes', false);  % Wrap path in double quotes if enabled 
 toolchain.addAttribute('RequiresBatchFile', true);  % Creates a batch file that execute the generated makefile if enabled
 

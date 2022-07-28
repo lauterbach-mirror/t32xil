@@ -1,0 +1,9 @@
+-AUTO_SECTION_LAYOUT
+-ROm=.data=.dataR
+-ROm=.sdata=.sdataR
+-OCDBG=84
+-DEBUG_MONITOR=7FF00-7FFFF
+-USER_OPT_BYTE=EF1AE8
+-LIBrary="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.11.00\lib\rl78nm4s99.lib"
+-LIBrary="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.11.00\lib\rl78nm4r.lib"
+-LIBrary="C:\Program Files (x86)\Renesas Electronics\CS+\CC\CC-RL\V1.11.00\lib\malloc_n.lib"

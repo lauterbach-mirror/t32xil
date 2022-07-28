@@ -2,6 +2,20 @@
 
 All notable changes to the TRACE32 Verification and Validation Suite will be documented in this file. This project adheres to [Semantic Versioning]((http://semver.org/spec/v2.0.0.html).
 
+## [6.11] - 2022-07-28
+
+### Added
+- Add support for MATLAB R2022b
+- Add Renesas CC-RL as custom toolchain for RL78
+
+### Fixed
+- Improve graceful shutdown of TRACE32 connection
+- Improve robustness of relative configuration file paths
+
+### Changed
+- All included custom build toolchain configuration are set to transform paths with whitespaces
+- Use Remote API to detect open TRACE32 instances
+
 ## [6.6] - 2022-01-18
 
 ### Added

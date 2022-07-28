@@ -9,7 +9,7 @@
 % @Author: CSA
 % @Copyright: (C) 1989-2019 Lauterbach GmbH, licensed for use with TRACE32(R) only
 % --------------------------------------------------------------------------------
-% $Id: t32xil_tc_hightec_tricore_gcc.m 5825 2021-11-19 08:35:56Z csax $
+% $Id: t32xil_tc_hightec_tricore_gcc.m 6172 2022-04-08 07:00:14Z csax $
 
 
 %% Creates a generic ToolchainInfo object for TRACE32 XIL
@@ -19,9 +19,10 @@ toolchain.Name = 'TRACE32 XIL HighTec TriCore Development Platform | gmake makef
 toolchain.Platform  = computer('arch');
 toolchain.SupportedVersion = 'v4.9.4.0';
 
-toolchain.addAttribute('TransformPathsWithSpaces', 0);  % Escape paths containing spaces if enabled
-toolchain.addAttribute('RequiresCommandFile', 0);  % Handle long archiver/linker calls on Windows systems if enabled
-toolchain.addAttribute('SupportsUNCPaths', 0);  % Support UNC paths on Windows if enabled 
+
+toolchain.addAttribute('TransformPathsWithSpaces', true);  % Escape paths containing spaces if enabled
+toolchain.addAttribute('RequiresCommandFile', false);  % Handle long archiver/linker calls on Windows systems if enabled
+toolchain.addAttribute('SupportsUNCPaths', false);  % Support UNC paths on Windows if enabled 
 toolchain.addAttribute('SupportsDoubleQuotes', false);  % Wrap path in double quotes if enabled 
 toolchain.addAttribute('RequiresBatchFile', true);  % Creates a batch file that execute the generated makefile if enabled
 

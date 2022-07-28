@@ -19,9 +19,9 @@ toolchain.Name = 'TRACE32 XIL GCC arm-none-eabi Cortex-M | gmake makefile';
 toolchain.Platform  = computer('arch');
 toolchain.SupportedVersion = '5.4.1';
 
-toolchain.addAttribute('TransformPathsWithSpaces', 0);  % Escape paths containing spaces if enabled
-toolchain.addAttribute('RequiresCommandFile', 0);  % Handle long archiver/linker calls on Windows systems if enabled
-toolchain.addAttribute('SupportsUNCPaths', 0);  % Support UNC paths on Windows if enabled 
+toolchain.addAttribute('TransformPathsWithSpaces', true);  % Escape paths containing spaces if enabled
+toolchain.addAttribute('RequiresCommandFile', false);  % Handle long archiver/linker calls on Windows systems if enabled
+toolchain.addAttribute('SupportsUNCPaths', false);  % Support UNC paths on Windows if enabled 
 toolchain.addAttribute('SupportsDoubleQuotes', false);  % Wrap path in double quotes if enabled 
 toolchain.addAttribute('RequiresBatchFile', true);  % Creates a batch file that execute the generated makefile if enabled
 
