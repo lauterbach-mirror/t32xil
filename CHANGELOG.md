@@ -1,6 +1,6 @@
  # Changelog
 
-All notable changes to the TRACE32 Verification and Validation Suite will be documented in this file. This project adheres to [Semantic Versioning]((http://semver.org/spec/v2.0.0.html).
+All notable changes to the TRACE32 XIL will be documented in this file. This project adheres to [Semantic Versioning]((http://semver.org/spec/v2.0.0.html).
 
 ## [6.23] - 2025-10-24
 
