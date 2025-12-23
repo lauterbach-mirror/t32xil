@@ -1,13 +1,13 @@
 % --------------------------------------------------------------------------------
 % @Title: ToolchainInfo object for GCC arm-none-eabi Cortex-M
-% @Description: 
+% @Description:
 %   Creates a generic ToolchainInfo object for TRAC32 XIL with GCC arm-none-eabi
 %   for Cortex-M targets. A toolchain object describes the basic information of
 %   the toolchain.
-%   
+%
 % @Keywords: PIL Processor-in-the-Loop Simulink MATLAB model-based
 % @Author: CSA
-% @Copyright: (C) 1989-2018 Lauterbach GmbH, licensed for use with TRACE32(R) only
+% @Copyright: (C) 1989-2024 Lauterbach GmbH, licensed for use with TRACE32(R) only
 % --------------------------------------------------------------------------------
 % $Id: t32xil_tc_gcc_arm_none_eabi.m 2855 2018-07-06 13:37:20Z csax $
 
@@ -21,8 +21,8 @@ toolchain.SupportedVersion = '5.4.1';
 
 toolchain.addAttribute('TransformPathsWithSpaces', true);  % Escape paths containing spaces if enabled
 toolchain.addAttribute('RequiresCommandFile', false);  % Handle long archiver/linker calls on Windows systems if enabled
-toolchain.addAttribute('SupportsUNCPaths', false);  % Support UNC paths on Windows if enabled 
-toolchain.addAttribute('SupportsDoubleQuotes', false);  % Wrap path in double quotes if enabled 
+toolchain.addAttribute('SupportsUNCPaths', false);  % Support UNC paths on Windows if enabled
+toolchain.addAttribute('SupportsDoubleQuotes', false);  % Wrap path in double quotes if enabled
 toolchain.addAttribute('RequiresBatchFile', true);  % Creates a batch file that execute the generated makefile if enabled
 
 

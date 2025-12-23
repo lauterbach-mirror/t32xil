@@ -1,14 +1,14 @@
 % --------------------------------------------------------------------------------
 % @Title: ToolchainInfo object for TRACE32 XIL
-% @Description: 
+% @Description:
 %   Creates a generic ToolchainInfo object for TRAC32 XIL. A toolchain
 %   object describes the basic information of the toolchain.
-%   
+%
 % @Keywords: PIL Processor-in-the-Loop Simulink MATLAB model-based
 % @Author: MBU, CSA
-% @Copyright: (C) 1989-2016 Lauterbach GmbH, licensed for use with TRACE32(R) only
+% @Copyright: (C) 1989-2024 Lauterbach GmbH, licensed for use with TRACE32(R) only
 % --------------------------------------------------------------------------------
-% $Id: t32xil_tc.m 6180 2022-04-11 15:53:31Z csax $
+% $Id: t32xil_tc.m 8277 2024-10-28 09:04:56Z csax $
 
 
 %% Creates a generic ToolchainInfo object for TRACE32 XIL
@@ -20,8 +20,8 @@ toolchain.SupportedVersion = '1.0';
 
 toolchain.addAttribute('TransformPathsWithSpaces', true);  % Escape paths containing spaces if enabled
 toolchain.addAttribute('RequiresCommandFile', false);  % Handle long archiver/linker calls on Windows systems if enabled
-toolchain.addAttribute('SupportsUNCPaths', false);  % Support UNC paths on Windows if enabled 
-toolchain.addAttribute('SupportsDoubleQuotes', false);  % Wrap path in double quotes if enabled 
+toolchain.addAttribute('SupportsUNCPaths', false);  % Support UNC paths on Windows if enabled
+toolchain.addAttribute('SupportsDoubleQuotes', false);  % Wrap path in double quotes if enabled
 toolchain.addAttribute('RequiresBatchFile', true);  % Creates a batch file that execute the generated makefile if enabled
 
 

@@ -1,21 +1,21 @@
 ; --------------------------------------------------------------------------------
 ; @Title: TRACE32 configuration file for TRACE32 Integration for Simulink
-; @Description: 
+; @Description:
 ;   !ToDo! Adapt to your configuration according to:
 ;    (1): Switch between TRACE32 Simulator and attached USB or Ethernet Debugger
 ;         Just one PBI setting is allowed, please comment out the other ones.
-;    (2): Set SYS and TMP to your Trace32 installation directory and temporary
+;    (2): Set SYS and TMP to your TRACE32 installation directory and temporary
 ;         directory. The SYS directory is used to find the fcc and T32 API files.
 ;    (3): Set 2 different and usable UDP ports of your host. The default
 ;         setting will be OK for most cases.
 ;    (4): Set 1 TCP port of your host. The default setting will be OK
 ;         for most cases.
-;   
+;
 ; @Keywords: PIL Processor-in-the-Loop Simulink MATLAB model-based
 ; @Author: MBU, CSA
-; @Copyright: (C) 1989-2018 Lauterbach GmbH, licensed for use with TRACE32(R) only
+; @Copyright: (C) 1989-2024 Lauterbach GmbH, licensed for use with TRACE32(R) only
 ; --------------------------------------------------------------------------------
-; $Id: simulinktemplate.config.t32 5989 2022-01-28 17:00:33Z csax $
+; $Id: simulinktemplate.config.t32 8540 2025-02-07 15:24:19Z csax $
 
 
 ; --------------------------(1)------------------------------
@@ -57,15 +57,13 @@ PRINTER=WINDOWS
 ; RLM_LICENSE=<port>@<server>
 
 ; --------------------------(3)------------------------------
-RCL=NETASSIST
+RCL=NETTCP
 ; Port for basic communication with Simulink
 PORT=20000
-PACKLEN=1024
 
-RCL=NETASSIST
+RCL=NETTCP
 ; Port for rtIOstream communication with Simulink
 PORT=20001
-PACKLEN=1024
 
 ; --------------------------(4)------------------------------
 SIMULINK=NETASSIST

@@ -1,0 +1,46 @@
+; --------------------------------------------------------------------------------
+; @Title: Load target code for MPC8610 instruction set simulator
+; @Description:
+;   Load target code for MPC8610 instruction set simulator. Running on MPC8610
+;   harware is not supported.
+; @Keywords: MPC8610
+; @Author: CSA
+; @Chip: MPC8610
+; @Copyright: (C) 1989-2023 Lauterbach GmbH, licensed for use with TRACE32(R) only
+; --------------------------------------------------------------------------------
+; $Id: trace32_mpc8610_startup.cmm 7362 2023-10-18 08:18:28Z csax $
+
+HELP.Filter.Add intsimulink
+
+ENTRY %LINE &ELF_FILE  ;do not modify this line
+
+IF (!OS.FILE(&ELF_FILE))
+(
+    PRINT %ERROR "The target binary location must be passed to the script."
+    ENDDO
+)
+
+RESet
+SYStem.RESet
+SYStem.CPU MPC8610
+SYStem.Up
+
+IF !INTERFACE.SIM()
+(
+  PRINT %ERROR "This demo is intended for TRACE32 running in simulator mode. Start TRACE32 with PBI=SIM in config.t32"
+  AREA.view
+  ENDDO
+)
+Data.LOAD "&ELF_FILE"
+sYmbol.ECA.LOADALL /SkipErrors
+
+; Support runtime memory accesses
+SETUP.VAR %STanDard %E
+
+Mode.Mix
+List.Mix
+
+; Do not start the target, if stack profiling is enabled
+Go
+
+ENDDO

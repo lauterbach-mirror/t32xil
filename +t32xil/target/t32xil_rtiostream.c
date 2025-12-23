@@ -8,7 +8,7 @@
  * @Author: MBU
  * @Copyright: (C) 1989-2016 Lauterbach GmbH, licensed for use with TRACE32(R) only
  * --------------------------------------------------------------------------------
- * $Id: t32xil_rtiostream.c 1272 2016-06-23 15:37:54Z csax $      
+ * $Id: t32xil_rtiostream.c 8422 2024-12-20 08:32:59Z csax $
  */
 
 
@@ -44,15 +44,17 @@ int rtIOStreamClose(int streamID)
 
 int rtIOStreamSend(int streamID, const void *src, size_t size, size_t *sizeSent)
 {
-    size_t i;
+    size_t i, num;
 
     while (T32_T2H_Size != 0);
 
-    for (i = 0; i < size; i++)
-        T32_T2H_Buffer[i] = ((const uint8_T *)src)[i];
+    num = (size < T32_T2H_BUFFERSIZE) ? size : sizeof(T32_T2H_Buffer) / sizeof(T32_T2H_Buffer[0]);
+    for (i = 0; i < num; i++) {
+        T32_T2H_Buffer[i] = ((const uint8_T *) src)[i];
+    }
 
-    T32_T2H_Size = (uint8_T) size;
-    *sizeSent = size;
+    T32_T2H_Size = (uint8_T) num;
+    *sizeSent = num;
 
     return 0;
 }

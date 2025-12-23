@@ -1,10 +1,18 @@
 //!< @file rtiostream.h
-//!< Copyright (c) 2012-2021 Lauterbach GmbH
+//!< Copyright (c) 2012-2024 Lauterbach GmbH
 
 #ifndef RTIOSTREAM_H__
 #define RTIOSTREAM_H__
 
-#define DLL_PUBLIC_API  __declspec(dllexport)
+#ifdef SHARED_LIB_BUILD
+# if defined(_MSC_VER)
+#  define DLL_PUBLIC_API  __declspec(dllexport)
+# else
+# define DLL_PUBLIC_API  __attribute__ ((visibility ("default")))
+#  endif
+#else
+# define DLL_PUBLIC_API
+#endif
 
 DLL_PUBLIC_API int rtIOStreamOpen(int argc, void *argv[]);
 DLL_PUBLIC_API int rtIOStreamSend(int streamID, const void *src, size_t size, size_t *sizeSent);

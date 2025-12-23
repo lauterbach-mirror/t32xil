@@ -1,0 +1,49 @@
+; --------------------------------------------------------------------------------
+; @Title: Simple PRACTICE hook triggered during PIL simulation
+; @Description:
+;   The settings trace32_settings.m allows configuration of PRACTICE hooks.
+;   These are callbacks that are executed at specific events during the
+;   PIL simulation.
+;   This PRACTICE script is an example for a simple callback. It prints
+;   up to three inputs and returns a parameter string.
+; @Keywords: PRACTICE callback
+; @Author: CSA
+; @Copyright: (C) 1989-2017 Lauterbach GmbH, licensed for use with TRACE32(R) only
+; --------------------------------------------------------------------------------
+; $Id: callback.cmm 7348 2023-10-13 10:31:30Z csax $
+
+
+PRIVATE &in1
+PRIVATE &in2
+PRIVATE &in3
+
+; --------------------------------------------------------------------------------
+; Parse argument string
+; --------------------------------------------------------------------------------
+PARAMETERS &parameters  // Input/output parameters
+&in1=STRing.SCANAndExtract("&parameters","IN1=","")
+&in2=STRing.SCANAndExtract("&parameters","IN2=","")
+&in3=STRing.SCANAndExtract("&parameters","IN3=","")
+
+IF "&in1"!=""
+(
+  PRINT "IN1=&in1"
+)
+
+IF "&in2"!=""
+(
+  PRINT "IN2=&in2"
+)
+
+IF "&in3"!=""
+(
+  PRINT "IN3=&in3"
+)
+
+; --------------------------------------------------------------------------------
+; Return argument string
+; --------------------------------------------------------------------------------
+PARAMETERS &parameters  // Input/output parameters
+PRINT " OUT1=output1  OUT2=output2 "
+
+ENDDO

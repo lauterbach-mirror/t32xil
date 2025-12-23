@@ -1,15 +1,15 @@
 % --------------------------------------------------------------------------------
 % @Title: ToolchainInfo object for HighTec TriCore Development Platform
-% @Description: 
+% @Description:
 %   Creates a generic ToolchainInfo object for TRACE32 XIL with HighTec TriCore
 %   Development Platform v4.9.4.0. A toolchain object describes the basic
 %   information of the toolchain.
-%   
+%
 % @Keywords: PIL Processor-in-the-Loop Simulink MATLAB model-based
 % @Author: CSA
-% @Copyright: (C) 1989-2019 Lauterbach GmbH, licensed for use with TRACE32(R) only
+% @Copyright: (C) 1989-2024 Lauterbach GmbH, licensed for use with TRACE32(R) only
 % --------------------------------------------------------------------------------
-% $Id: t32xil_tc_hightec_tricore_gcc.m 6172 2022-04-08 07:00:14Z csax $
+% $Id: t32xil_tc_hightec_tricore_gcc.m 8277 2024-10-28 09:04:56Z csax $
 
 
 %% Creates a generic ToolchainInfo object for TRACE32 XIL
@@ -22,8 +22,8 @@ toolchain.SupportedVersion = 'v4.9.4.0';
 
 toolchain.addAttribute('TransformPathsWithSpaces', true);  % Escape paths containing spaces if enabled
 toolchain.addAttribute('RequiresCommandFile', false);  % Handle long archiver/linker calls on Windows systems if enabled
-toolchain.addAttribute('SupportsUNCPaths', false);  % Support UNC paths on Windows if enabled 
-toolchain.addAttribute('SupportsDoubleQuotes', false);  % Wrap path in double quotes if enabled 
+toolchain.addAttribute('SupportsUNCPaths', false);  % Support UNC paths on Windows if enabled
+toolchain.addAttribute('SupportsDoubleQuotes', false);  % Wrap path in double quotes if enabled
 toolchain.addAttribute('RequiresBatchFile', true);  % Creates a batch file that execute the generated makefile if enabled
 
 

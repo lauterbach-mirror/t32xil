@@ -1,6 +1,6 @@
 % --------------------------------------------------------------------------------
 % @Title: Register custom toolchains for TRACE32 XIL
-% @Description: 
+% @Description:
 %   Custom toolchains can be registered after creation of a ToolchainInfo
 %   object. To register an m-file with name "rtwTargetInfo" has to be on
 %   the MATLAB path. Use the command
@@ -9,12 +9,12 @@
 %   Use the command
 %       RTW.TargetRegistry.getInstance('reset')
 %   to register the the custom toolchain.
-%   
+%
 % @Keywords: PIL Processor-in-the-Loop Simulink MATLAB model-based
 % @Author: CSA
-% @Copyright: (C) 1989-2022 Lauterbach GmbH, licensed for use with TRACE32(R) only
+% @Copyright: (C) 1989-2024 Lauterbach GmbH, licensed for use with TRACE32(R) only
 % --------------------------------------------------------------------------------
-% $Id: rtwTargetInfo.m 6292 2022-06-02 14:25:35Z csax $
+% $Id: rtwTargetInfo.m 8277 2024-10-28 09:04:56Z csax $
 
 %% Callback to detect the custom toolchains
 function rtwTargetInfo(tr)
@@ -32,21 +32,13 @@ function config = loc_createToolchain
     config(2) = coder.make.ToolchainInfoRegistry;
     config(2).Name = 'TRACE32 XIL GCC arm-none-eabi Cortex-R | gmake makefile';
     config(2).FileName = fullfile(fileparts(mfilename('fullpath')), 't32xil_tc_gcc_arm_none_eabi_cortex_r.mat');
-    if verLessThan('matlab', '9.12')
-        config(2).TargetHWDeviceType = {'ARM Compatible->ARM Cortex'};
-    else
-        config(2).TargetHWDeviceType = {'ARM Compatible->ARM Cortex-R'};
-    end
+    config(2).TargetHWDeviceType = {'ARM Compatible->ARM Cortex', 'ARM Compatible->ARM Cortex-R'};
     config(2).Platform  = {computer('arch')};
 
     config(3) = coder.make.ToolchainInfoRegistry;
     config(3).Name = 'TRACE32 XIL GCC arm-none-eabi Cortex-M | gmake makefile';
     config(3).FileName = fullfile(fileparts(mfilename('fullpath')), 't32xil_tc_gcc_arm_none_eabi_cortex_m.mat');
-    if verLessThan('matlab', '9.12')
-        config(3).TargetHWDeviceType = {'ARM Compatible->ARM Cortex'};
-    else
-        config(3).TargetHWDeviceType = {'ARM Compatible->ARM Cortex-M'};
-    end
+    config(3).TargetHWDeviceType = {'ARM Compatible->ARM Cortex', 'ARM Compatible->ARM Cortex-M'};
     config(3).Platform  = {computer('arch')};
 
     config(4) = coder.make.ToolchainInfoRegistry;
@@ -66,6 +58,12 @@ function config = loc_createToolchain
     config(6).FileName = fullfile(fileparts(mfilename('fullpath')), 't32xil_tc_renesas_rl78_ccrl.mat');
     config(6).TargetHWDeviceType = {'Renesas->RL78'};
     config(6).Platform  = {computer('arch')};
+
+    config(7) = coder.make.ToolchainInfoRegistry;
+    config(7).Name = 'TRACE32 XIL Diab Compiler Power Architecture | gmake makefile';
+    config(7).FileName = fullfile(fileparts(mfilename('fullpath')), 't32xil_tc_ppc_diab.mat');
+    config(7).TargetHWDeviceType = {'Freescale->MPC86xx'};
+    config(7).Platform  = {computer('arch')};
 
     % To register more custom toolchains:
     % 1) Copy and paste the five preceding 'config' lines.

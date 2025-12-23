@@ -1,0 +1,41 @@
+MEMORY
+{
+    ram:    org = 0x00000, len = 0x30000  /* 512KB - 703KB */
+    stack:  org = 0xb0000, len = 0x10000  /* 7043B - 768KB */
+}
+
+SECTIONS
+{
+    GROUP : {
+	.text (TEXT)	: {
+		*(.text)
+		*(.rdata)
+		*(.rodata)
+		*(.frame_info)
+		*(.init)
+		*(.fini)
+	}
+	
+	__DATA_RAM	= .;
+	.sdata2 (TEXT)	: { *(.rosdata) }
+	.data (DATA)	: { *(.data)
+			    ctordtor.o(.ctors) *(.ctors)
+			    ctordtor.o(.dtors) *(.dtors) }
+	.sdata (DATA)	: { *(.sdata) }
+	__DATA_END	= .;
+
+	/* Allocate uninitialized sections.			    */
+
+	__BSS_START	= .;
+	.sbss : {}
+        .bss  : {}
+	__BSS_END	= .;
+
+	/* Any remaining space will be used as a heap.		    */
+
+	__HEAP_START	= .;
+    } > ram
+}
+
+__SP_INIT      = ADDR(stack ) + SIZEOF(stack );
+__SP_END       = ADDR(stack );
