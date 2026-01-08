@@ -8,7 +8,7 @@ The key benefits are:
 - Plug and play target support
 - Built-in support for various build toolchains
 - IEC 61508 compliant unit testing
-- On-the-fly debugging 
+- On-the-fly debugging
 
 Tested for use with MATLAB R2010b and newer.
 
@@ -37,3 +37,8 @@ Integrated instruction set simulators are available for a majority of the suppor
 ### Debugging Within Simulink
 
 The add-on offers native debugging between Simulink models and TRACE32. Selecting an element of the model allows quick navigation to the associated source code section within TRACE32 and vice versa. Simulation runs at model level can be synchronized with the code exectution on the target by setting breakpoints.
+
+
+### Running Tests with Polyspace Test
+
+The add-on can be used in combination with Polyspace Test to execute tests on the target hardware.
