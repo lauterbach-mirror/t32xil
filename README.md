@@ -17,7 +17,7 @@ Tested for use with MATLAB R2010b and newer.
 
 TRACE32 provides debug support for more than 80 microprocessor architectures including:
 - TriCore
-- Arm/Cortex
+- Arm Cortex
 - Power Architecture
 - RH850
 - RL78
