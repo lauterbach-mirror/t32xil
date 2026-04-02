@@ -2,6 +2,14 @@
 
 All notable changes to the TRACE32 XIL will be documented in this file. This project adheres to [Semantic Versioning]((http://semver.org/spec/v2.0.0.html).
 
+## [6.23.2] - 2026-02-06
+
+### Added
+- Update library code for TRACE32 Remote API
+
+### Fixed
+- Fix use of bdroot with Polyspace Test
+
 ## [6.23] - 2025-10-24
 
 ### Added
